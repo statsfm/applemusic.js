@@ -17,7 +17,7 @@ export interface Album extends Resource {
 }
 
 namespace Album {
-  // https://developer.apple.com/documentation/applemusicapi/album/attributes
+  // https://developer.apple.com/documentation/applemusicapi/albums/attributes
   export interface Attributes {
     albumName: string;
     artistName: string;
@@ -31,9 +31,10 @@ namespace Album {
     name: string;
     playParams?: PlayParameters;
     recordLabel: string;
-    releaseDate: CalendarDate;
+    releaseDate?: CalendarDate;
     trackCount: number;
     url: string;
+    upc?: string;
     isMasteredForItunes: boolean;
   }
 
