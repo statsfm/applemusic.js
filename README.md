@@ -76,7 +76,7 @@ main();
 
 ### Fetching Many Resources
 
-You can fetch playlists, artists, songs, playlists, music videos, or stations, library playlists and songs with `client.RESOURCES.get()`:
+You can fetch multiple playlists, artists, songs, playlists, music videos, or stations, library playlists and songs at once with `client.RESOURCES.getMany()`:
 
 ```typescript
 async function main() {
