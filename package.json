@@ -1,6 +1,6 @@
 {
   "name": "@statsfm/applemusic.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Statically typed SDK for the Apple Music Web API",
   "main": "dist/index.js",
   "private": false,
