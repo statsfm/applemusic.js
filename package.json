@@ -14,7 +14,7 @@
     "upload": "yarn build && yarn publish && git push",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:tsc": "tsc --noEmit -p .",
-    "docs": "typedoc --excludePrivate --excludeProtected --name \"spotify.js documentation\" --out docs src/index.ts"
+    "docs": "typedoc --excludePrivate --excludeProtected --name \"applemusic.js documentation\" --out docs src/index.ts"
   },
   "devDependencies": {
     "@tribecamp/eslint-config-base": "^1.1.2",
