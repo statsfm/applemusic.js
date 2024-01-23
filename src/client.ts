@@ -10,7 +10,7 @@ import { StationResponse } from './serverTypes/stationResponse';
 import CatalogUrl from './resourceClient/apiUrlBuilder/catalogUrl';
 import LibraryUrl from './resourceClient/apiUrlBuilder/libraryUrl';
 
-export class Client {
+export class AppleMusicAPI {
   configuration: ClientConfiguration;
 
   albums: ResourceClient<AlbumResponse>;
@@ -20,10 +20,10 @@ export class Client {
   songs: ResourceClient<SongResponse>;
   stations: ResourceClient<StationResponse>;
   library: {
-    songs: ResourceClient<SongResponse>,
-    playlists: ResourceClient<PlaylistResponse>
+    songs: ResourceClient<SongResponse>;
+    playlists: ResourceClient<PlaylistResponse>;
   };
-  
+
   constructor(configuration: ClientConfiguration) {
     this.configuration = configuration;
 
@@ -37,6 +37,6 @@ export class Client {
     this.library = {
       songs: new ResourceClient<SongResponse>(new LibraryUrl('songs'), this.configuration),
       playlists: new ResourceClient<PlaylistResponse>(new LibraryUrl('playlists'), this.configuration)
-    }
+    };
   }
 }

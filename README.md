@@ -25,9 +25,9 @@ Type definitions for TypeScript are also included in the package.
 You need to instantiate a client with your developer token:
 
 ```typescript
-import { Client } from "@statsfm/applemusic.js";
+import { Client } from '@statsfm/applemusic.js';
 
-const client = new Client({ 
+const client = new AppleMusicAPI({
   developerToken: 'YOUR_DEVELOPER_TOKEN',
   mediaUserToken: 'YOUR_MUT' // optional
 });
@@ -39,7 +39,7 @@ You can fetch album, artists, songs, playlists, music videos, or stations with `
 
 ```typescript
 async function main() {
-  const client = new Client({ developerToken: 'YOUR_DEVELOPER_TOKEN' });
+  const client = new AppleMusicAPI({ developerToken: 'YOUR_DEVELOPER_TOKEN' });
 
   const playlistID = 'pl.5ee8333dbe944d9f9151e97d92d1ead9';
   const response = await client.playlists.get(playlistID, { storefront: 'us' });
@@ -80,7 +80,7 @@ You can fetch playlists, artists, songs, playlists, music videos, or stations, l
 
 ```typescript
 async function main() {
-  const client = new Client({ 
+  const client = new Client({
     developerToken: 'YOUR_DEVELOPER_TOKEN',
     mediaUserToken: 'YOUR_MUT'
   });
@@ -88,7 +88,7 @@ async function main() {
   const response = await client.library.playlists.getMany({ storefront: 'us' });
   const playlists = response.data;
 
-  console.log(playlists); 
+  console.log(playlists);
   // [
   //   {
   //     id: 'p.zp6KlXEiBvxMR8g',
@@ -96,7 +96,7 @@ async function main() {
   //     href: '/v1/me/library/playlists/p.zp6KlXOiBvdMR8g',
   //     attributes: {
   //       canEdit: false,
-  //       name: 'My playlist',  
+  //       name: 'My playlist',
   //       description: [Object],
   //       isPublic: false,
   //       artwork: [Artwork],
@@ -144,8 +144,8 @@ main();
 
 You _must_ specify storefront either:
 
-* `defaultStorefront` parameter in the constructor
-* `storefront` parameter in `get()`
+- `defaultStorefront` parameter in the constructor
+- `storefront` parameter in `get()`
 
 ```typescript
 const client = new Client({
@@ -158,7 +158,7 @@ const response = await client.playlists.get(playlistID);
 
 ```typescript
 const client = new Client({
-  developerToken: 'YOUR_DEVELOPER_TOKEN',
+  developerToken: 'YOUR_DEVELOPER_TOKEN'
 });
 
 const response = await client.playlists.get(playlistID, { storefront: 'us' });
@@ -168,9 +168,9 @@ const response = await client.playlists.get(playlistID, { storefront: 'us' });
 
 You can specify language tag either:
 
-* Unspecify for the storefront's default language 
-* `defaultLanguageTag ` parameter in the constructor
-* `languageTag` parameter in `get()`
+- Unspecify for the storefront's default language
+- `defaultLanguageTag` parameter in the constructor
+- `languageTag` parameter in `get()`
 
 ```typescript
 const client = new Client({
@@ -195,7 +195,7 @@ const response = await client.playlists.get(playlistID);
 ```typescript
 const client = new Client({
   developerToken: 'YOUR_DEVELOPER_TOKEN',
-  defaultStorefront: 'jp',
+  defaultStorefront: 'jp'
 });
 
 const response = await client.playlists.get(playlistID, { languageTag: 'en-US' });
