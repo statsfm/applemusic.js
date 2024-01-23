@@ -1,0 +1,32 @@
+import { Options } from '../resourceClient';
+import ApiUrlBuilder from './apiUrlBuilder';
+
+export default class SearchUrl extends ApiUrlBuilder {
+  // @ts-expect-error
+  getManyUrl(storefront: string, params?: Options): string {
+    throw new Error('Method not implemented.');
+  }
+
+  getOneUrl(term: string, storefront: string, params?: Options): string {
+    const query = `?${this.buildQuery({ ...params, term })}`;
+    return `/catalog/${storefront}/search${query}`;
+  }
+
+  private buildQuery(params: Options & { term: string }) {
+    const searchParams = new URLSearchParams({
+      term: params.term
+    });
+
+    if (params.searchTypes) {
+      searchParams.set('types', params.searchTypes.join(','));
+    }
+
+    if (params.query) {
+      params.query.forEach((value, key) => {
+        searchParams.set(key, value);
+      });
+    }
+
+    return searchParams.toString();
+  }
+}

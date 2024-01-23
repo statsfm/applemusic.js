@@ -5,11 +5,14 @@ import { BaseResourceClient } from './baseResourceClient';
 
 interface Parameters {
   l?: string;
+  term?: string;
 }
 
-interface Options {
+export interface Options {
   storefront?: string;
   languageTag?: string;
+  searchTypes?: ('songs' | 'artists' | 'albums' | 'playlists')[];
+  query?: URLSearchParams;
 }
 
 export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
@@ -36,12 +39,12 @@ export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
   }
 
   async get(id: string, options?: Options): Promise<T> {
-    const url = this.urlBuilder.getOneUrl(id, this.getStorefront(options?.storefront));
+    const url = this.urlBuilder.getOneUrl(id, this.getStorefront(options?.storefront), options);
     return this.getByUrl(url, options);
   }
 
   async getMany(options?: Options): Promise<T> {
-    const url = this.urlBuilder.getManyUrl(this.getStorefront(options?.storefront));
+    const url = this.urlBuilder.getManyUrl(this.getStorefront(options?.storefront), options);
     return this.getByUrl(url, options);
   }
 }

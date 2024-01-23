@@ -1,8 +1,7 @@
-import ApiUrlBuilder from "./apiUrlBuilder";
+import ApiUrlBuilder from './apiUrlBuilder';
 
-export default class LibraryUrl extends ApiUrlBuilder 
-{
-    getManyUrl() {
-        return `me/library/${this.urlName}`;
-    }    
+export default class LibraryUrl extends ApiUrlBuilder {
+  getManyUrl() {
+    return `me/library/${this.urlName!}`;
+  }
 }
