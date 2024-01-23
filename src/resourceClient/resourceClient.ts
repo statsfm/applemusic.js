@@ -8,14 +8,14 @@ interface Parameters {
 }
 
 interface Options {
-  storefront?: string; 
-  languageTag?: string
+  storefront?: string;
+  languageTag?: string;
 }
 
 export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
   async getByUrl(url: string, options?: Options): Promise<T> {
     let params: Parameters = {
-      l: options?.languageTag || this.configuration.defaultLanguageTag
+      l: options?.languageTag || this.config.defaultLanguageTag
     };
 
     const httpResponse = await this.request('GET', url, params);
@@ -43,5 +43,5 @@ export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
   async getMany(options?: Options): Promise<T> {
     const url = this.urlBuilder.getManyUrl(this.getStorefront(options?.storefront));
     return this.getByUrl(url, options);
-  }  
+  }
 }

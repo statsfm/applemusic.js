@@ -6,7 +6,7 @@
   "private": false,
   "public": true,
   "repository": "https://github.com/statsfm/applemusic.js",
-  "author": "Sjoerd Bolten <sjoerdabolten@gmail.com>",
+  "author": "Sjoerd Bolten <sjoerd@stats.fm>",
   "license": "GPL-3.0",
   "scripts": {
     "dev": "rm -rf dist && tsc --watch",
@@ -33,6 +33,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.24.0",
+    "axios-better-stacktrace": "^2.1.2"
   }
 }
