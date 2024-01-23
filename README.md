@@ -25,7 +25,7 @@ Type definitions for TypeScript are also included in the package.
 You need to instantiate a client with your developer token:
 
 ```typescript
-import { Client } from '@statsfm/applemusic.js';
+import { AppleMusicAPI } from '@statsfm/applemusic.js';
 
 const client = new AppleMusicAPI({
   developerToken: 'YOUR_DEVELOPER_TOKEN',
@@ -80,7 +80,7 @@ You can fetch playlists, artists, songs, playlists, music videos, or stations, l
 
 ```typescript
 async function main() {
-  const client = new Client({
+  const client = new AppleMusicAPI({
     developerToken: 'YOUR_DEVELOPER_TOKEN',
     mediaUserToken: 'YOUR_MUT'
   });
@@ -117,7 +117,7 @@ You can handle [API errors](https://developer.apple.com/documentation/applemusic
 
 ```typescript
 async function main() {
-  const client = new Client({ developerToken: 'YOUR_DEVELOPER_TOKEN' });
+  const client = new AppleMusicAPI({ developerToken: 'YOUR_DEVELOPER_TOKEN' });
 
   try {
     const response = await client.playlists.get('nosuchplaylist', { storefront: 'us' });
@@ -148,7 +148,7 @@ You _must_ specify storefront either:
 - `storefront` parameter in `get()`
 
 ```typescript
-const client = new Client({
+const client = new AppleMusicAPI({
   developerToken: 'YOUR_DEVELOPER_TOKEN',
   defaultStorefront: 'us'
 });
@@ -157,7 +157,7 @@ const response = await client.playlists.get(playlistID);
 ```
 
 ```typescript
-const client = new Client({
+const client = new AppleMusicAPI({
   developerToken: 'YOUR_DEVELOPER_TOKEN'
 });
 
@@ -173,7 +173,7 @@ You can specify language tag either:
 - `languageTag` parameter in `get()`
 
 ```typescript
-const client = new Client({
+const client = new AppleMusicAPI({
   developerToken: 'YOUR_DEVELOPER_TOKEN',
   defaultStorefront: 'jp'
 });
@@ -183,7 +183,7 @@ const response = await client.playlists.get(playlistID);
 ```
 
 ```typescript
-const client = new Client({
+const client = new AppleMusicAPI({
   developerToken: 'YOUR_DEVELOPER_TOKEN',
   defaultStorefront: 'jp',
   defaultLanguageTag: 'en-US'
@@ -193,7 +193,7 @@ const response = await client.playlists.get(playlistID);
 ```
 
 ```typescript
-const client = new Client({
+const client = new AppleMusicAPI({
   developerToken: 'YOUR_DEVELOPER_TOKEN',
   defaultStorefront: 'jp'
 });
