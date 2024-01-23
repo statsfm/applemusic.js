@@ -193,7 +193,6 @@ export class BaseResourceClient {
   }
 
   protected request(method: Method, apiPath: string, params?: any): AxiosPromise {
-    console.log(apiPath);
     return this.client.request({
       method: method,
       url: apiPath,
