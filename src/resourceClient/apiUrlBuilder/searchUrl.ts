@@ -8,11 +8,11 @@ export default class SearchUrl extends ApiUrlBuilder {
   }
 
   getOneUrl(term: string, storefront: string, params?: Options): string {
-    const query = `?${this.buildQuery({ ...params, term })}`;
+    const query = `?${this.buildSearchQuery({ ...params, term })}`;
     return `/catalog/${storefront}/search${query}`;
   }
 
-  private buildQuery(params: Options & { term: string }) {
+  private buildSearchQuery(params: Options & { term: string }) {
     const searchParams = new URLSearchParams({
       term: params.term
     });

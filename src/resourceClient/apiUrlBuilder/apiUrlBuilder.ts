@@ -6,6 +6,20 @@ export default abstract class ApiUrlBuilder {
   abstract getManyUrl(storefront: string, params?: Options): string;
 
   getOneUrl(id: string, storefront: string, params?: Options): string {
-    return this.getManyUrl(storefront, params) + `/${id}`;
+    const query = !!params?.query ? `?${this.buildQuery(params)}` : '';
+    return this.getManyUrl(storefront) + `/${id}${query}`;
+  }
+
+  buildQuery(params?: Options) {
+    if (params == undefined || params == null) return '';
+
+    const searchParams = new URLSearchParams();
+    if (params.query) {
+      params.query.forEach((value, key) => {
+        searchParams.set(key, value);
+      });
+    }
+
+    return searchParams.toString();
   }
 }
