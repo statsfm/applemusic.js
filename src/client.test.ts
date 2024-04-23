@@ -1,4 +1,4 @@
-import { Client } from './client';
+import { AppleMusicAPI as Client } from './client';
 import * as process from 'process';
 import { AppleMusicError } from './appleMusicError';
 
@@ -28,11 +28,11 @@ describe('Client', () => {
     const album = response.data[0];
     const releaseDate = album.attributes!.releaseDate;
 
-    expect(releaseDate.year).toEqual(2018);
-    expect(releaseDate.month).toEqual(11);
-    expect(releaseDate.day).toEqual(30);
+    expect(releaseDate?.year).toEqual(2018);
+    expect(releaseDate?.month).toEqual(11);
+    expect(releaseDate?.day).toEqual(30);
 
-    expect(releaseDate.toUTCDate().getFullYear()).toEqual(2018);
+    expect(releaseDate?.toUTCDate().getFullYear()).toEqual(2018);
   });
 
   it('handles application errors', async () => {

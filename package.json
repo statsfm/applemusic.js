@@ -3,15 +3,17 @@
   "version": "0.1.4",
   "description": "Statically typed SDK for the Apple Music Web API",
   "main": "dist/index.js",
-  "private": false,
-  "public": true,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "repository": "https://github.com/statsfm/applemusic.js",
   "author": "Sjoerd Bolten <sjoerd@stats.fm>",
   "license": "GPL-3.0",
   "scripts": {
     "dev": "rm -rf dist && tsc --watch",
     "build": "rm -rf dist && tsc",
-    "upload": "yarn build && yarn publish && git push",
+    "upload": "yarn build && yarn npm publish",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:tsc": "tsc --noEmit -p .",
     "docs": "typedoc --excludePrivate --excludeProtected --name \"applemusic.js documentation\" --out docs src/index.ts"
@@ -35,5 +37,6 @@
   "dependencies": {
     "axios": "^0.24.0",
     "axios-better-stacktrace": "^2.1.2"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }

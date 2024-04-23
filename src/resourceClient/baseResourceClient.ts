@@ -9,13 +9,18 @@ import { AuthError, BadRequestError, ForbiddenError, NotFoundError, RatelimitErr
 
 export class BaseResourceClient {
   protected client: AxiosInstance = this.create({ resInterceptor: true });
+  protected baseURL = 'https://api.music.apple.com';
 
-  constructor(public urlBuilder: ApiUrlBuilder, public config: ClientConfiguration) {}
+  constructor(public urlBuilder: ApiUrlBuilder, public config: ClientConfiguration) {
+    if (config.http?.baseURL) {
+      this.baseURL = config.http.baseURL;
+    }
+  }
 
   // create axios client, set interceptors, handle errors & auth
   private create(options: { resInterceptor?: boolean }): AxiosInstance {
     const config: AxiosRequestConfig = {
-      baseURL: 'https://api.music.apple.com/v1',
+      baseURL: this.baseURL,
       proxy: this.config.http?.proxy,
       // https://github.com/axios/axios/blob/v0.20.0-0/lib/defaults.js#L57-L65
       transformResponse: [
@@ -59,9 +64,11 @@ export class BaseResourceClient {
       // add authorization, content
       config.headers = {
         Authorization: `Bearer ${this.config.developerToken}`,
-        'media-user-token': this.config.mediaUserToken || '',
+        'media-user-token': this.config.mediaUserToken ?? '',
         origin: 'https://music.apple.com',
-        // TODO: add user agent
+        ...(this.config.http?.headers ?? {}),
+        'User-Agent':
+          this.config.http?.userAgent ?? '@statsfm/applemusic.js (https://github.com/statsfm/applemusic.js)',
         ...config.headers
       };
 
@@ -117,7 +124,9 @@ export class BaseResourceClient {
 
                 // retry x times
                 for (let i = 0; i < this.config.retry5xxAmount; i++) {
-                  console.log(`${res.status} error, retrying... (${i + 1}/${this.config.retry5xxAmount})`);
+                  if (typeof this.config.debug === 'boolean' && this.config.debug === true) {
+                    console.log(`${res.status} error, retrying... (${i + 1}/${this.config.retry5xxAmount})`);
+                  }
 
                   // timeout one second
                   // eslint-disable-next-line no-await-in-loop
@@ -183,7 +192,7 @@ export class BaseResourceClient {
   }
 
   protected getStorefront(storefront?: string): string {
-    const result = storefront || this.config.defaultStorefront;
+    const result = storefront ?? this.config.defaultStorefront;
 
     if (!result) {
       throw new Error(`Specify storefront with function parameter or default one with Client's constructor`);
@@ -223,7 +232,7 @@ function parseJSONWithDateHandling(json: string) {
       return calendarDate;
     }
 
-    if (value.match(datePattern)) {
+    if (RegExp(datePattern).exec(value)) {
       return new Date(value);
     }
 
