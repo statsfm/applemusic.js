@@ -18,7 +18,7 @@ export interface Options {
 export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
   async getByUrl(url: string, options?: Options): Promise<T> {
     let params: Parameters = {
-      l: options?.languageTag || this.config.defaultLanguageTag
+      l: options?.languageTag ?? this.config.defaultLanguageTag
     };
 
     const httpResponse = await this.request('GET', url, params);

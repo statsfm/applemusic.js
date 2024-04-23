@@ -8,13 +8,12 @@ import { ClientRequest } from 'http';
 import { AuthError, BadRequestError, ForbiddenError, NotFoundError, RatelimitError } from './errors';
 
 export class BaseResourceClient {
-  protected client: AxiosInstance = this.create({ resInterceptor: true });
-  protected baseURL = 'https://api.music.apple.com';
+  protected client: AxiosInstance;
+  baseURL: string;
 
   constructor(public urlBuilder: ApiUrlBuilder, public config: ClientConfiguration) {
-    if (config.http?.baseURL) {
-      this.baseURL = config.http.baseURL;
-    }
+    this.baseURL = config.http?.baseURL ?? 'https://api.music.apple.com';
+    this.client = this.create({ resInterceptor: true });
   }
 
   // create axios client, set interceptors, handle errors & auth
