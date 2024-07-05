@@ -24,7 +24,10 @@ export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
     const httpResponse = await this.request('GET', url, params);
 
     if (!httpResponse.data) {
-      throw new AppleMusicError(`Request failed with status code ${httpResponse.status}`, httpResponse.status);
+      throw new AppleMusicError(
+        `Request to ${url} failed with status code ${httpResponse.status}`,
+        httpResponse.status
+      );
     }
 
     const apiResponse = httpResponse.data as ResponseRoot;
