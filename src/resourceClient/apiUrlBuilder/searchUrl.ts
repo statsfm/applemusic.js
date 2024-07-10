@@ -2,7 +2,7 @@ import { Options } from '../resourceClient';
 import ApiUrlBuilder from './apiUrlBuilder';
 
 export default class SearchUrl extends ApiUrlBuilder {
-  // @ts-expect-error
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   getManyUrl(storefront: string, params?: Options): string {
     throw new Error('Method not implemented.');
   }

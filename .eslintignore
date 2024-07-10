@@ -1,0 +1,6 @@
+/node_modules/
+dist/
+.eslintrc.js
+test.mjs
+src/**/*.test.ts
+jest.config.js

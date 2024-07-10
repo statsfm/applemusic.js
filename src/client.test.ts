@@ -17,7 +17,9 @@ describe('Client', () => {
 
   it('handles Playlist.Attributes.lastModifiedDate as Date object', async () => {
     // https://music.apple.com/jp/playlist/a-list-pop/pl.5ee8333dbe944d9f9151e97d92d1ead9?l=en
-    const response = await client.playlists.get('pl.5ee8333dbe944d9f9151e97d92d1ead9', { storefront: 'jp' });
+    const response = await client.playlists.get('pl.5ee8333dbe944d9f9151e97d92d1ead9', {
+      storefront: 'jp'
+    });
     const playlist = response.data[0];
     expect(playlist.attributes!.lastModifiedDate.getFullYear()).toBeGreaterThanOrEqual(2020);
   });
@@ -62,7 +64,9 @@ describe('Client', () => {
     } catch (error) {
       catched = true;
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toEqual('Request failed with status code 401');
+      expect(error.message).toEqual(
+        'Request to /v1/catalog/jp/playlists/pl.7d657a836db14d768accd2e6ffd1b0ad failed with status code 401'
+      );
     }
 
     expect(catched).toBeTruthy();
@@ -74,7 +78,10 @@ describe('Client', () => {
     const defaultLanguageResponse = await client.playlists.get(id, { storefront: 'jp' });
     expect(defaultLanguageResponse.data[0].attributes!.name).toEqual('Ａリスト：ポップ');
 
-    const englishResponse = await client.playlists.get(id, { storefront: 'jp', languageTag: 'en-US' });
+    const englishResponse = await client.playlists.get(id, {
+      storefront: 'jp',
+      languageTag: 'en-US'
+    });
     expect(englishResponse.data[0].attributes!.name).toEqual('A-List Pop');
   });
 });
