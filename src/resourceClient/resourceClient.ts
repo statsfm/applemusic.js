@@ -17,7 +17,7 @@ export interface Options {
 
 export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
   async getByUrl(url: string, options?: Options): Promise<T> {
-    let params: Parameters = {
+    const params: Parameters = {
       l: options?.languageTag ?? this.config.defaultLanguageTag
     };
 
@@ -43,11 +43,11 @@ export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
 
   async get(id: string, options?: Options): Promise<T> {
     const url = this.urlBuilder.getOneUrl(id, this.getStorefront(options?.storefront), options);
-    return this.getByUrl(url, options);
+    return await this.getByUrl(url, options);
   }
 
   async getMany(options?: Options): Promise<T> {
     const url = this.urlBuilder.getManyUrl(this.getStorefront(options?.storefront), options);
-    return this.getByUrl(url, options);
+    return await this.getByUrl(url, options);
   }
 }

@@ -7,7 +7,7 @@ export default abstract class ApiUrlBuilder {
 
   getOneUrl(id: string, storefront: string, params?: Options): string {
     const query = !!params?.query ? `?${this.buildQuery(params)}` : '';
-    return this.getManyUrl(storefront) + `/${id}${query}`;
+    return `${this.getManyUrl(storefront)}/${id}${query}`;
   }
 
   buildQuery(params?: Options) {

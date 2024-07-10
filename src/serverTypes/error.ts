@@ -12,6 +12,6 @@ namespace Error {
   // https://developer.apple.com/documentation/applemusicapi/error/source
   export interface Source {
     parameter?: string;
-    pointer?: any; // What is JSONPointer?
+    pointer?: unknown; // What is JSONPointer?
   }
 }
