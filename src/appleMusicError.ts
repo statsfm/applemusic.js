@@ -1,4 +1,4 @@
-import { ResponseRoot } from './serverTypes/responseRoot';
+import type { ResponseRoot } from './interfaces/AppleMusic/responseRoot';
 
 export class AppleMusicError extends Error {
   constructor(

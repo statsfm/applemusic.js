@@ -1,6 +1,6 @@
 import { AppleMusicError } from '../appleMusicError';
-import { ResponseRoot } from '../serverTypes/responseRoot';
-import { Error } from '../serverTypes/error';
+import type { ResponseRoot } from '../interfaces/AppleMusic/responseRoot';
+import type { Error } from '../interfaces/AppleMusic/error';
 import { BaseResourceClient } from './baseResourceClient';
 
 interface Parameters {
