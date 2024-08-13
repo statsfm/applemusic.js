@@ -1,13 +1,13 @@
 import { ClientConfiguration } from './clientConfiguration';
 import { ResourceClient } from './resourceClient/resourceClient';
 
-import { AlbumResponse } from './serverTypes/albumResponse';
-import { ArtistResponse } from './serverTypes/artistResponse';
-import { MusicVideoResponse } from './serverTypes/musicVideoResponse';
-import { PlaylistResponse } from './serverTypes/playlistResponse';
-import { SongResponse } from './serverTypes/songResponse';
-import { StationResponse } from './serverTypes/stationResponse';
-import { SearchResponse } from './serverTypes/searchResponse';
+import type { AlbumResponse } from './interfaces/AppleMusic/albumResponse';
+import type { ArtistResponse } from './interfaces/AppleMusic/artistResponse';
+import type { MusicVideoResponse } from './interfaces/AppleMusic/musicVideoResponse';
+import type { PlaylistResponse } from './interfaces/AppleMusic/playlistResponse';
+import type { SongResponse } from './interfaces/AppleMusic/songResponse';
+import type { StationResponse } from './interfaces/AppleMusic/stationResponse';
+import type { SearchResponse } from './interfaces/AppleMusic/searchResponse';
 import CatalogUrl from './resourceClient/apiUrlBuilder/catalogUrl';
 import LibraryUrl from './resourceClient/apiUrlBuilder/libraryUrl';
 import SearchUrl from './resourceClient/apiUrlBuilder/searchUrl';
