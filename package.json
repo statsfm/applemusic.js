@@ -16,7 +16,8 @@
     "upload": "yarn build && yarn npm publish",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:tsc": "tsc --noEmit -p .",
-    "docs": "typedoc --excludePrivate --excludeProtected --name \"applemusic.js documentation\" --out docs src/index.ts"
+    "docs": "typedoc --excludePrivate --excludeProtected --name \"applemusic.js documentation\" --out docs src/index.ts",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
