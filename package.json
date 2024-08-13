@@ -8,7 +8,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "repository": "https://github.com/statsfm/applemusic.js",
-  "author": "Sjoerd Bolten <sjoerd@stats.fm>",
+  "author": "stats.fm Developers (originally made by Sjoerd Bolten)",
   "license": "GPL-3.0",
   "scripts": {
     "dev": "rm -rf dist && tsc --watch",
