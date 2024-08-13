@@ -117,3 +117,5 @@ package-lock.json
 !.yarn/sdks
 !.yarn/versions
 .DS_Store
+
+docs/
