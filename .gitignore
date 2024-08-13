@@ -119,3 +119,5 @@ docs/
 !.yarn/sdks
 !.yarn/versions
 .DS_Store
+
+docs/
