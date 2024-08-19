@@ -19,7 +19,7 @@ import {
   RatelimitError,
   RequestRetriesExceededError,
   UnauthorizedError
-} from './errors';
+} from '../errors';
 import { sleep } from '../util/sleep';
 
 export class BaseResourceClient {
