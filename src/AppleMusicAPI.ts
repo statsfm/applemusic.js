@@ -1,4 +1,4 @@
-import { ClientConfiguration } from './clientConfiguration';
+import { ClientConfiguration } from './interfaces/Config';
 import { ResourceClient } from './resourceClient/resourceClient';
 
 import type { AlbumResponse } from './interfaces/AppleMusic/albumResponse';

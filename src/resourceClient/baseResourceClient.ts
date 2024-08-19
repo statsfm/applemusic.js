@@ -8,7 +8,7 @@ import axios, {
 } from 'axios';
 import * as https from 'https';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
-import { ClientConfiguration } from '../clientConfiguration';
+import { ClientConfiguration } from '../interfaces/Config';
 import { CalendarDate } from '../util/CalendarDate';
 import ApiUrlBuilder from './apiUrlBuilder/apiUrlBuilder';
 import { ClientRequest, IncomingMessage } from 'http';
