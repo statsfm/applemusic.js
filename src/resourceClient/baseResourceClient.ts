@@ -9,7 +9,7 @@ import axios, {
 import * as https from 'https';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import { ClientConfiguration } from '../clientConfiguration';
-import { CalendarDate } from '../calendarDate';
+import { CalendarDate } from '../util/CalendarDate';
 import ApiUrlBuilder from './apiUrlBuilder/apiUrlBuilder';
 import { ClientRequest, IncomingMessage } from 'http';
 import {
