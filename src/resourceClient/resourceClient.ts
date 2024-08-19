@@ -1,4 +1,4 @@
-import { AppleMusicError } from '../appleMusicError';
+import { AppleMusicError } from '../AppleMusicError';
 import type { ResponseRoot } from '../interfaces/AppleMusic/responseRoot';
 import type { Error } from '../interfaces/AppleMusic/error';
 import { BaseResourceClient } from './baseResourceClient';

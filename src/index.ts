@@ -1,6 +1,6 @@
 export * from './AppleMusicAPI';
+export * from './AppleMusicError';
 
-export * from './appleMusicError';
 export * from './util/CalendarDate';
 
 // Interfaces
