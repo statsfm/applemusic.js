@@ -26,6 +26,7 @@ export class BaseResourceClient {
   baseURL: string;
 
   constructor(
+    // eslint-disable-next-line no-unused-vars
     public urlBuilder: ApiUrlBuilder,
     public config: ClientConfiguration
   ) {
@@ -40,7 +41,7 @@ export class BaseResourceClient {
       proxy: this.config.http?.proxy,
       // https://github.com/axios/axios/blob/v0.20.0-0/lib/defaults.js#L57-L65
       transformResponse: [
-        (data) => {
+        (data): unknown => {
           /*eslint no-param-reassign:0*/
           if (typeof data === 'string') {
             try {
@@ -60,6 +61,7 @@ export class BaseResourceClient {
         ...https,
         request: (
           options: https.RequestOptions,
+          // eslint-disable-next-line no-unused-vars
           callback: (res: IncomingMessage) => void
         ): ClientRequest =>
           https.request(
@@ -141,6 +143,7 @@ export class BaseResourceClient {
 
   private async handleRateLimit(res: AxiosResponse, err: AxiosError): Promise<AxiosResponse> {
     if (this.config.logRetry) {
+      // eslint-disable-next-line no-console
       console.log(res);
     }
 
@@ -148,6 +151,7 @@ export class BaseResourceClient {
       const retryAfter = parseInt(res.headers['retry-after']) || 0;
 
       if (this.config.logRetry || this.config.logRetry === undefined) {
+        // eslint-disable-next-line no-console
         console.error(
           `Hit ratelimit, retrying in ${retryAfter} second(s), path: ${err.request.path}`
         );
@@ -181,6 +185,7 @@ export class BaseResourceClient {
 
     for (let i = 1; i <= this.config.retry5xxAmount; i++) {
       if (this.config.debug) {
+        // eslint-disable-next-line no-console
         console.log(`(${i}/${this.config.retry5xxAmount}) retry ${err.config.url} - ${statusCode}`);
       }
 
