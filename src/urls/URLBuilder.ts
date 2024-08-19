@@ -1,6 +1,11 @@
-import { Options } from '../ResourceClient';
+export interface Options {
+  storefront?: string;
+  languageTag?: string;
+  searchTypes?: ('songs' | 'artists' | 'albums' | 'playlists')[];
+  query?: URLSearchParams;
+}
 
-export default abstract class ApiUrlBuilder {
+export abstract class URLBuilder {
   // eslint-disable-next-line no-unused-vars
   constructor(protected urlName?: string) {}
 

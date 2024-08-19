@@ -3,8 +3,7 @@ import axios, {
   AxiosInstance,
   AxiosPromise,
   AxiosRequestConfig,
-  AxiosResponse,
-  Method
+  AxiosResponse
 } from 'axios';
 import * as https from 'https';
 import { ClientRequest, IncomingMessage } from 'http';
@@ -234,11 +233,7 @@ export class HttpClient {
     }
   }
 
-  protected request(method: Method, apiPath: string, params?: unknown): AxiosPromise {
-    return this.client.request({
-      method: method,
-      url: apiPath,
-      params: params
-    });
+  get<T>(url: string, config: AxiosRequestConfig): AxiosPromise<T> {
+    return this.client.get(url, config);
   }
 }

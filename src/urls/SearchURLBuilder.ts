@@ -1,7 +1,6 @@
-import { Options } from '../ResourceClient';
-import ApiUrlBuilder from './apiUrlBuilder';
+import { URLBuilder, Options } from './URLBuilder';
 
-export default class SearchUrl extends ApiUrlBuilder {
+export class SearchURLBuilder extends URLBuilder {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   getManyUrl(_storefront: string, _params?: Options): string {
     throw new Error('Method not implemented.');

@@ -1,7 +1,6 @@
-import { Options } from '../ResourceClient';
-import ApiUrlBuilder from './apiUrlBuilder';
+import { URLBuilder, Options } from './URLBuilder';
 
-export default class CatalogUrl extends ApiUrlBuilder {
+export class CatalogURLBuilder extends URLBuilder {
   getManyUrl(storefront: string, params?: Options): string {
     const query = !!params?.query ? `?${this.buildQuery(params)}` : '';
     return `/v1/catalog/${storefront}/${this.urlName!}${query}`;
