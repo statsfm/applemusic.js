@@ -109,6 +109,8 @@ dist
 # Don't track lockfile since this is a library
 package-lock.json
 
+docs/
+
 .pnp.*
 .yarn/*
 !.yarn/patches
