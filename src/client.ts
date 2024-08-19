@@ -13,8 +13,6 @@ import LibraryUrl from './resourceClient/apiUrlBuilder/libraryUrl';
 import SearchUrl from './resourceClient/apiUrlBuilder/searchUrl';
 
 export class AppleMusicAPI {
-  configuration: ClientConfiguration;
-
   albums: ResourceClient<AlbumResponse>;
   artists: ResourceClient<ArtistResponse>;
   musicVideos: ResourceClient<MusicVideoResponse>;
@@ -27,35 +25,24 @@ export class AppleMusicAPI {
     playlists: ResourceClient<PlaylistResponse>;
   };
 
-  constructor(configuration: ClientConfiguration) {
-    this.configuration = configuration;
-
-    this.albums = new ResourceClient<AlbumResponse>(new CatalogUrl('albums'), this.configuration);
-    this.artists = new ResourceClient<ArtistResponse>(
-      new CatalogUrl('artists'),
-      this.configuration
-    );
+  constructor(public configuration: Readonly<ClientConfiguration>) {
+    this.albums = new ResourceClient<AlbumResponse>(new CatalogUrl('albums'), configuration);
+    this.artists = new ResourceClient<ArtistResponse>(new CatalogUrl('artists'), configuration);
     this.musicVideos = new ResourceClient<MusicVideoResponse>(
       new CatalogUrl('music-videos'),
-      this.configuration
+      configuration
     );
     this.playlists = new ResourceClient<PlaylistResponse>(
       new CatalogUrl('playlists'),
-      this.configuration
+      configuration
     );
-    this.songs = new ResourceClient<SongResponse>(new CatalogUrl('songs'), this.configuration);
-    this.stations = new ResourceClient<StationResponse>(
-      new CatalogUrl('stations'),
-      this.configuration
-    );
-    this.search = new ResourceClient<SearchResponse>(new SearchUrl(), this.configuration);
+    this.songs = new ResourceClient<SongResponse>(new CatalogUrl('songs'), configuration);
+    this.stations = new ResourceClient<StationResponse>(new CatalogUrl('stations'), configuration);
+    this.search = new ResourceClient<SearchResponse>(new SearchUrl(), configuration);
 
     this.library = {
-      songs: new ResourceClient<SongResponse>(new LibraryUrl('songs'), this.configuration),
-      playlists: new ResourceClient<PlaylistResponse>(
-        new LibraryUrl('playlists'),
-        this.configuration
-      )
+      songs: new ResourceClient<SongResponse>(new LibraryUrl('songs'), configuration),
+      playlists: new ResourceClient<PlaylistResponse>(new LibraryUrl('playlists'), configuration)
     };
   }
 }
