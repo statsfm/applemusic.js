@@ -1,4 +1,4 @@
-import { CalendarDate } from '../calendarDate';
+import { CalendarDate } from '../../util/CalendarDate';
 
 import { Resource } from './resource';
 import { Artwork } from './artwork';
