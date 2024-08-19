@@ -9,7 +9,6 @@ import axios, {
 import * as https from 'https';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import { ClientConfiguration } from '../interfaces/Config';
-import { CalendarDate } from '../util/CalendarDate';
 import ApiUrlBuilder from './apiUrlBuilder/apiUrlBuilder';
 import { ClientRequest, IncomingMessage } from 'http';
 import {
@@ -21,6 +20,7 @@ import {
   UnauthorizedError
 } from '../errors';
 import { sleep } from '../util/sleep';
+import { parseWithDates } from '../util/json';
 
 export class BaseResourceClient {
   protected client: AxiosInstance;
@@ -46,11 +46,12 @@ export class BaseResourceClient {
           /*eslint no-param-reassign:0*/
           if (typeof data === 'string') {
             try {
-              data = parseJSONWithDateHandling(data);
+              data = parseWithDates(data);
             } catch (e) {
               /* Ignore */
             }
           }
+
           return data;
         }
       ],
@@ -258,28 +259,4 @@ export class BaseResourceClient {
       params: params
     });
   }
-}
-
-const datePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseJSONWithDateHandling(json: string): any {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return JSON.parse(json, (_key: any, value: any) => {
-    if (typeof value !== 'string') {
-      return value;
-    }
-
-    const calendarDate = CalendarDate.parse(value);
-
-    if (calendarDate) {
-      return calendarDate;
-    }
-
-    if (datePattern.test(value)) {
-      return new Date(value);
-    }
-
-    return value;
-  });
 }
