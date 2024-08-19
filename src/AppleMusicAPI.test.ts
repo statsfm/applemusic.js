@@ -1,4 +1,4 @@
-import { AppleMusicAPI as Client } from './client';
+import { AppleMusicAPI } from './AppleMusicAPI';
 import * as process from 'process';
 import { AppleMusicError } from './appleMusicError';
 
@@ -8,11 +8,11 @@ if (!developerToken) {
 }
 
 // TODO: Mock request with something like Ruby's VCR
-describe('Client', () => {
-  let client: Client;
+describe('AppleMusicAPI', () => {
+  let client: AppleMusicAPI;
 
   beforeEach(() => {
-    client = new Client({ developerToken });
+    client = new AppleMusicAPI({ developerToken });
   });
 
   it('handles Playlist.Attributes.lastModifiedDate as Date object', async () => {
@@ -53,7 +53,7 @@ describe('Client', () => {
   });
 
   it('handles authorization errors', async () => {
-    client = new Client({ developerToken: 'invalid' });
+    client = new AppleMusicAPI({ developerToken: 'invalid' });
 
     let catched = false;
 
