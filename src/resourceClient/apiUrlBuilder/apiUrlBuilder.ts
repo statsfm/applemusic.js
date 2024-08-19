@@ -1,8 +1,10 @@
 import { Options } from '../resourceClient';
 
 export default abstract class ApiUrlBuilder {
+  // eslint-disable-next-line no-unused-vars
   constructor(protected urlName?: string) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   abstract getManyUrl(storefront: string, params?: Options): string;
 
   getOneUrl(id: string, storefront: string, params?: Options): string {
@@ -10,7 +12,7 @@ export default abstract class ApiUrlBuilder {
     return `${this.getManyUrl(storefront)}/${id}${query}`;
   }
 
-  buildQuery(params?: Options) {
+  buildQuery(params?: Options): string {
     if (params == undefined || params == null) return '';
 
     const searchParams = new URLSearchParams();
