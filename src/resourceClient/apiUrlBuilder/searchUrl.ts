@@ -2,8 +2,8 @@ import { Options } from '../resourceClient';
 import ApiUrlBuilder from './apiUrlBuilder';
 
 export default class SearchUrl extends ApiUrlBuilder {
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  getManyUrl(storefront: string, params?: Options): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  getManyUrl(_storefront: string, _params?: Options): string {
     throw new Error('Method not implemented.');
   }
 
@@ -12,7 +12,7 @@ export default class SearchUrl extends ApiUrlBuilder {
     return `/v1/catalog/${storefront}/search${query}`;
   }
 
-  private buildSearchQuery(params: Options & { term: string }) {
+  private buildSearchQuery(params: Options & { term: string }): string {
     const searchParams = new URLSearchParams({
       term: params.term
     });
