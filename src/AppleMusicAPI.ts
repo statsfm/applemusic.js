@@ -1,5 +1,5 @@
 import { ClientConfiguration } from './interfaces/Config';
-import { ResourceClient } from './resourceClient/resourceClient';
+import { ResourceClient } from './resourceClient/ResourceClient';
 
 import type { AlbumResponse } from './interfaces/AppleMusic/albumResponse';
 import type { ArtistResponse } from './interfaces/AppleMusic/artistResponse';

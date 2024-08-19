@@ -1,4 +1,4 @@
-import { Options } from '../resourceClient';
+import { Options } from '../ResourceClient';
 import ApiUrlBuilder from './apiUrlBuilder';
 
 export default class CatalogUrl extends ApiUrlBuilder {
