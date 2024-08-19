@@ -20,6 +20,7 @@ import {
   RequestRetriesExceededError,
   UnauthorizedError
 } from './errors';
+import { sleep } from '../util/sleep';
 
 export class BaseResourceClient {
   protected client: AxiosInstance;
@@ -157,7 +158,7 @@ export class BaseResourceClient {
         );
       }
 
-      await this.sleep(retryAfter * 1_000);
+      await sleep(retryAfter * 1_000);
       return await this.client.request(err.config);
     } else {
       throw new RatelimitError(
@@ -189,7 +190,7 @@ export class BaseResourceClient {
         console.log(`(${i}/${this.config.retry5xxAmount}) retry ${err.config.url} - ${statusCode}`);
       }
 
-      await this.sleep(1_000);
+      await sleep(1_000);
 
       try {
         const nRes = await nClient.request(err.config);
@@ -256,14 +257,6 @@ export class BaseResourceClient {
       url: apiPath,
       params: params
     });
-  }
-
-  /**
-   * Sleep function.
-   * @param {number} delay Delay in milliseconds.
-   */
-  private sleep(delay: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, delay));
   }
 }
 
