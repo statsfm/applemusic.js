@@ -1,6 +1,6 @@
 import { AppleMusicAPI } from './AppleMusicAPI';
 import * as process from 'process';
-import { AppleMusicError } from './appleMusicError';
+import { AppleMusicError } from './AppleMusicError';
 
 const developerToken = process.env['APPLE_MUSIC_DEVELOPER_TOKEN']!;
 if (!developerToken) {
