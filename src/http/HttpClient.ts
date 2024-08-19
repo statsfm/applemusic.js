@@ -7,10 +7,9 @@ import axios, {
   Method
 } from 'axios';
 import * as https from 'https';
+import { ClientRequest, IncomingMessage } from 'http';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import { ClientConfiguration } from '../interfaces/Config';
-import ApiUrlBuilder from './apiUrlBuilder/apiUrlBuilder';
-import { ClientRequest, IncomingMessage } from 'http';
 import {
   BadRequestError,
   ForbiddenError,
@@ -22,17 +21,14 @@ import {
 import { sleep } from '../util/sleep';
 import { parseWithDates } from '../util/json';
 
-export class BaseResourceClient {
-  protected client: AxiosInstance;
-  baseURL: string;
+export class HttpClient {
+  protected baseURL = 'https://api.music.apple.com';
+  protected client = this.create({ resInterceptor: true });
 
-  constructor(
-    // eslint-disable-next-line no-unused-vars
-    public urlBuilder: ApiUrlBuilder,
-    public config: ClientConfiguration
-  ) {
-    this.baseURL = config.http?.baseURL ?? 'https://api.music.apple.com';
-    this.client = this.create({ resInterceptor: true });
+  constructor(readonly config: ClientConfiguration) {
+    if (config.http?.baseURL) {
+      this.baseURL = config.http.baseURL;
+    }
   }
 
   // create axios client, set interceptors, handle errors & auth
@@ -42,17 +38,16 @@ export class BaseResourceClient {
       proxy: this.config.http?.proxy,
       // https://github.com/axios/axios/blob/v0.20.0-0/lib/defaults.js#L57-L65
       transformResponse: [
-        (data): unknown => {
-          /*eslint no-param-reassign:0*/
-          if (typeof data === 'string') {
-            try {
-              data = parseWithDates(data);
-            } catch (e) {
-              /* Ignore */
-            }
+        (value: string): unknown => {
+          if (typeof value !== 'string') {
+            return value;
           }
 
-          return data;
+          try {
+            return parseWithDates(value);
+          } catch (e) {
+            return value;
+          }
         }
       ],
       validateStatus: () => true // Handle errors by ourselves
@@ -239,20 +234,7 @@ export class BaseResourceClient {
     }
   }
 
-  protected getStorefront(storefront?: string): string {
-    const result = storefront ?? this.config.defaultStorefront;
-
-    if (!result) {
-      throw new Error(
-        `Specify storefront with function parameter or default one with Client's constructor`
-      );
-    }
-
-    return result;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  protected request(method: Method, apiPath: string, params?: any): AxiosPromise {
+  protected request(method: Method, apiPath: string, params?: unknown): AxiosPromise {
     return this.client.request({
       method: method,
       url: apiPath,

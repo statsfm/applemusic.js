@@ -1,7 +1,9 @@
 import { AppleMusicError } from '../AppleMusicError';
 import type { ResponseRoot } from '../interfaces/AppleMusic/responseRoot';
 import type { Error } from '../interfaces/AppleMusic/error';
-import { BaseResourceClient } from './baseResourceClient';
+import { HttpClient } from '../http/HttpClient';
+import ApiUrlBuilder from './apiUrlBuilder/apiUrlBuilder';
+import { ClientConfiguration } from 'src/interfaces/Config';
 
 interface Parameters {
   l?: string;
@@ -15,7 +17,27 @@ export interface Options {
   query?: URLSearchParams;
 }
 
-export class ResourceClient<T extends ResponseRoot> extends BaseResourceClient {
+export class ResourceClient<T extends ResponseRoot> extends HttpClient {
+  constructor(
+    // eslint-disable-next-line no-unused-vars
+    private readonly urlBuilder: ApiUrlBuilder,
+    public readonly config: ClientConfiguration
+  ) {
+    super(config);
+  }
+
+  protected getStorefront(storefront?: string): string {
+    const result = storefront ?? this.config.defaultStorefront;
+
+    if (result) {
+      return result;
+    }
+
+    throw new Error(
+      `Specify storefront with function parameter or default one with Client's constructor`
+    );
+  }
+
   async getByUrl(url: string, options?: Options): Promise<T> {
     const params: Parameters = {
       l: options?.languageTag ?? this.config.defaultLanguageTag

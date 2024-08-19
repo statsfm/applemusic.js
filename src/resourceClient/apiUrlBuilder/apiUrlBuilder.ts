@@ -1,4 +1,4 @@
-import { Options } from '../resourceClient';
+import { Options } from '../ResourceClient';
 
 export default abstract class ApiUrlBuilder {
   // eslint-disable-next-line no-unused-vars
