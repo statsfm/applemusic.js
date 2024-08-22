@@ -1,5 +1,8 @@
-export * from './serverTypes';
-export * from './appleMusicError';
-export * from './calendarDate';
-export * from './client';
-export * from './clientConfiguration';
+export * from './AppleMusicAPI';
+export * from './AppleMusicError';
+
+export * from './util/CalendarDate';
+
+// Interfaces
+export * from './interfaces/Config';
+export * from './interfaces/AppleMusic';

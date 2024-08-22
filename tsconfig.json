@@ -9,7 +9,9 @@
     "removeComments": false,
     "sourceMap": true,
     "baseUrl": "./",
-    "lib": ["ES2020"],
+    "lib": [
+      "ES2020"
+    ],
     "rootDir": "src",
     "declaration": true,
     "experimentalDecorators": true,
@@ -19,6 +21,11 @@
     "resolveJsonModule": true,
     "outDir": "dist/"
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.test.ts", "node_modules"]
+  "include": [
+    "src/**/*",
+  ],
+  "exclude": [
+    "src/**/*.test.ts",
+    "node_modules"
+  ]
 }

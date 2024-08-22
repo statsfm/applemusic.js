@@ -1,6 +1,6 @@
 {
   "name": "@statsfm/applemusic.js",
-  "version": "0.2.3",
+  "version": "0.3.1-rc.1",
   "description": "Statically typed SDK for the Apple Music Web API",
   "main": "dist/index.js",
   "publishConfig": {
@@ -8,7 +8,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "repository": "https://github.com/statsfm/applemusic.js",
-  "author": "Sjoerd Bolten <sjoerd@stats.fm>",
+  "author": "stats.fm Developers (originally made by Sjoerd Bolten)",
   "license": "GPL-3.0",
   "scripts": {
     "dev": "rm -rf dist && tsc --watch",
@@ -16,13 +16,15 @@
     "upload": "yarn build && yarn npm publish",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:tsc": "tsc --noEmit -p .",
-    "docs": "typedoc --excludePrivate --excludeProtected --name \"applemusic.js documentation\" --out docs src/index.ts"
+    "docs": "typedoc --excludePrivate --excludeProtected --name \"applemusic.js documentation\" --out docs src/index.ts",
+    "test": "jest --setupFiles dotenv/config"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.10",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.0",
+    "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-deprecation": "^3.0.0",
@@ -39,5 +41,5 @@
     "axios": "^1.7.2",
     "axios-better-stacktrace": "^2.1.6"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.4.0"
 }

@@ -1,4 +1,4 @@
-import { CalendarDate } from '../calendarDate';
+import { CalendarDate } from '../../util/CalendarDate';
 
 import { Resource } from './resource';
 import { Artwork } from './artwork';
@@ -9,45 +9,40 @@ import { Preview } from './preview';
 import { AlbumRelationship } from './albumRelationship';
 import { ArtistRelationship } from './artistRelationship';
 import { GenreRelationship } from './genreRelationship';
-import { StationRelationship } from './stationRelationship';
 
-// https://developer.apple.com/documentation/applemusicapi/song
-export interface Song extends Resource {
-  attributes?: Song.Attributes;
-  relationships?: Song.Relationships;
-  type: 'songs';
+// https://developer.apple.com/documentation/applemusicapi/musicvideo
+export interface MusicVideo extends Resource {
+  attributes?: MusicVideo.Attributes;
+  relationships?: MusicVideo.Relationships;
+  type: 'musicVideos';
 }
 
-namespace Song {
-  // https://developer.apple.com/documentation/applemusicapi/song/attributes
+namespace MusicVideo {
+  // https://developer.apple.com/documentation/applemusicapi/musicvideo/attributes
   export interface Attributes {
-    albumName: string;
+    albumName?: string;
     artistName: string;
     artwork: Artwork;
-    composerName?: string;
     contentRating?: ContentRating;
-    discNumber: number;
     durationInMillis?: number;
     editorialNotes?: EditorialNotes;
     genreNames: string[];
     isrc: string;
-    movementCount?: number;
-    movementName?: string;
-    movementNumber?: number;
     name: string;
     playParams?: PlayParameters;
     previews: Preview[];
     releaseDate: CalendarDate;
-    trackNumber: number;
+    trackNumber?: number;
     url: string;
-    workName?: string;
+    videoSubType?: string;
+    hasHDR: boolean;
+    has4K: boolean;
   }
 
-  // https://developer.apple.com/documentation/applemusicapi/song/relationships
+  // https://developer.apple.com/documentation/applemusicapi/musicvideo/relationships
   export interface Relationships {
     albums?: AlbumRelationship;
     artists?: ArtistRelationship;
     genres?: GenreRelationship;
-    station?: StationRelationship;
   }
 }
