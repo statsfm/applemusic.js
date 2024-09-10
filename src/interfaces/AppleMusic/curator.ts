@@ -13,10 +13,10 @@ export interface Curator extends Resource {
 namespace Curator {
   // https://developer.apple.com/documentation/applemusicapi/curator/attributes
   export interface Attributes {
-    artwork: Artwork;
-    editorialNotes?: EditorialNotes;
-    name: string;
-    url: string;
+    artwork: Artwork; // Required: The curator artwork
+    editorialNotes?: EditorialNotes; // Optional: The notes about the curator
+    name: string; // Required: The localized name of the curator
+    url: string; // Required: The URL for sharing the curator in Apple Music
   }
 
   // https://developer.apple.com/documentation/applemusicapi/curator/relationships

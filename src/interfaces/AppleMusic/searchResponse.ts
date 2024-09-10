@@ -8,10 +8,16 @@ import { SongResponse } from './songResponse';
 // https://developer.apple.com/documentation/applemusicapi/searchresponse
 export interface SearchResponse extends ResponseRoot {
   results: {
-    songs: SongResponse;
-    albums: AlbumResponse;
-    playlists: PlaylistResponse;
-    artists: ArtistResponse;
-    'music-videos': MusicVideoResponse;
+    activities?: unknown; // You can define a specific type if needed
+    albums?: AlbumResponse;
+    'apple-curators'?: unknown; // You can define a specific type if needed
+    artists?: ArtistResponse;
+    curators?: unknown; // You can define a specific type if needed
+    'music-videos'?: MusicVideoResponse;
+    playlists?: PlaylistResponse;
+    'record-labels'?: unknown; // You can define a specific type if needed
+    songs?: SongResponse;
+    stations?: unknown; // You can define a specific type if needed
+    top?: unknown; // You can define a specific type if needed
   };
 }
