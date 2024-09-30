@@ -9,6 +9,8 @@ import { Preview } from './preview';
 import { AlbumRelationship } from './albumRelationship';
 import { ArtistRelationship } from './artistRelationship';
 import { GenreRelationship } from './genreRelationship';
+import { LibraryRelationship } from './libraryRelationship';
+import { SongRelationship } from './songRelationship';
 
 // https://developer.apple.com/documentation/applemusicapi/musicvideo
 export interface MusicVideo extends Resource {
@@ -21,28 +23,34 @@ namespace MusicVideo {
   // https://developer.apple.com/documentation/applemusicapi/musicvideo/attributes
   export interface Attributes {
     albumName?: string;
-    artistName: string;
-    artwork: Artwork;
-    contentRating?: ContentRating;
-    durationInMillis?: number;
+    artistName: string; // Required
+    artistUrl?: string; // New field
+    artwork: Artwork; // Required
+    contentRating?: ContentRating; // Can now take string values like 'clean' or 'explicit'
+    durationInMillis?: number; // Required
     editorialNotes?: EditorialNotes;
-    genreNames: string[];
-    isrc: string;
-    name: string;
+    genreNames: string[]; // Required
+    has4K: boolean; // Required
+    hasHDR: boolean; // Required
+    isrc: string; // Required
+    name: string; // Required
     playParams?: PlayParameters;
-    previews: Preview[];
-    releaseDate: CalendarDate;
+    previews: Preview[]; // Required
+    releaseDate: string; // Updated to string for YYYY-MM-DD or YYYY format
     trackNumber?: number;
-    url: string;
-    videoSubType?: string;
-    hasHDR: boolean;
-    has4K: boolean;
+    url: string; // Required
+    videoSubType?: string; // Updated with possible value 'preview'
+    workId?: string; // New field (for classical music)
+    workName?: string; // New field (for classical music)
   }
+  
 
   // https://developer.apple.com/documentation/applemusicapi/musicvideo/relationships
   export interface Relationships {
-    albums?: AlbumRelationship;
-    artists?: ArtistRelationship;
-    genres?: GenreRelationship;
-  }
+    albums?: AlbumRelationship; // The albums associated with the music video (10 default, 10 max)
+    artists?: ArtistRelationship; // The artists associated with the music video (10 default, 10 max)
+    genres?: GenreRelationship; // The genres associated with the music video, not included by default
+    library?: LibraryRelationship; // The library for a music video if added to the library
+    songs?: SongRelationship; // The songs associated with the music video (10 default, 10 max)
+  }  
 }

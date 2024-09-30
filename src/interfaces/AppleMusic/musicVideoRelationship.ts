@@ -1,7 +1,6 @@
 import { Relationship } from './relationship';
-import { MusicVideo } from './musicVideo';
+import { MusicVideo } from './musicVideo'; // Use the existing MusicVideo interface
 
-// https://developer.apple.com/documentation/applemusicapi/musicvideorelationship
 export interface MusicVideoRelationship extends Relationship {
   data: MusicVideo[];
 }

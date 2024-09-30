@@ -14,6 +14,7 @@ import { SearchManager } from './search/SearchManager';
 import { LibraryManager } from './library/LibraryManager';
 
 export class AppleMusicAPI {
+  _client: HttpClient;
   albums: CatalogManager<AlbumResponse>;
   artists: CatalogManager<ArtistResponse>;
   musicVideos: CatalogManager<MusicVideoResponse>;
@@ -27,18 +28,18 @@ export class AppleMusicAPI {
   };
 
   constructor(public configuration: Readonly<ClientConfiguration>) {
-    const client = new HttpClient(configuration);
+    this._client = new HttpClient(configuration);
 
-    this.albums = new CatalogManager<AlbumResponse>(client, 'albums');
-    this.artists = new CatalogManager<ArtistResponse>(client, 'artists');
-    this.musicVideos = new CatalogManager<MusicVideoResponse>(client, 'music-videos');
-    this.playlists = new CatalogManager<PlaylistResponse>(client, 'playlists');
-    this.songs = new CatalogManager<SongResponse>(client, 'songs');
-    this.stations = new CatalogManager<StationResponse>(client, 'stations');
-    this.search = new SearchManager<SearchResponse>(client);
+    this.albums = new CatalogManager<AlbumResponse>(this._client, 'albums');
+    this.artists = new CatalogManager<ArtistResponse>(this._client, 'artists');
+    this.musicVideos = new CatalogManager<MusicVideoResponse>(this._client, 'music-videos');
+    this.playlists = new CatalogManager<PlaylistResponse>(this._client, 'playlists');
+    this.songs = new CatalogManager<SongResponse>(this._client, 'songs');
+    this.stations = new CatalogManager<StationResponse>(this._client, 'stations');
+    this.search = new SearchManager<SearchResponse>(this._client);
     this.library = {
-      songs: new LibraryManager<SongResponse>(client, 'songs'),
-      playlists: new LibraryManager<PlaylistResponse>(client, 'playlists')
+      songs: new LibraryManager<SongResponse>(this._client, 'songs'),
+      playlists: new LibraryManager<PlaylistResponse>(this._client, 'playlists')
     };
   }
 }
