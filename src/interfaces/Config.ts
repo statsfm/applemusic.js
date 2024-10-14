@@ -51,4 +51,8 @@ export interface ClientConfiguration {
    * Enable debug mode.
    */
   debug?: boolean;
+  /**
+   * List of keys that contain dates
+   */
+  dateKeys?: string[];
 }

@@ -5,8 +5,12 @@ const DATE_REG_EXP = /^(\d{4})-(\d{2})-(\d{2})$/;
 const DATE_TIME_REG_EXP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function parseWithDates<T>(text: string): T {
-  return JSON.parse(text, (_key: string, value: unknown) => {
+export function parseWithDates<T>(text: string, dateKeys: string[]): T {
+  return JSON.parse(text, (key: string, value: unknown) => {
+    if (!dateKeys.includes(key)) {
+      return value;
+    }
+
     if (typeof value !== 'string') {
       return value;
     }

@@ -69,7 +69,10 @@ export class HttpClient {
           }
 
           try {
-            return parseWithDates(value);
+            return parseWithDates(value, this.config.dateKeys || [
+              'releaseDate',
+              'lastModifiedDate',
+            ]);
           } catch (e) {
             return value;
           }
