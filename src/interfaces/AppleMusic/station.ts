@@ -12,13 +12,16 @@ export interface Station extends Resource {
 namespace Station {
   // https://developer.apple.com/documentation/applemusicapi/station/attributes
   export interface Attributes {
-    artwork: Artwork;
+    artwork: Artwork; // Required
+    contentRating?: string; // New field, possible values: 'clean', 'explicit'
     durationInMillis?: number;
     editorialNotes?: EditorialNotes;
-    episodeNumber?: number;
-    isLive: boolean;
-    name: string;
-    playParams?: PlayParameters; // Undocumented but supported
-    url: string;
+    episodeNumber?: string; // Updated to string
+    isLive: boolean; // Required
+    mediaKind: 'audio' | 'video'; // New field, required
+    name: string; // Required
+    playParams?: PlayParameters; // Optional, supported by API
+    stationProviderName?: string; // New field
+    url: string; // Required
   }
 }
