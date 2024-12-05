@@ -5,6 +5,7 @@ import { GenreRelationship } from './genreRelationship';
 import { MusicVideoRelationship } from './musicVideoRelationship';
 import { PlaylistRelationship } from './playlistRelationship';
 import { StationRelationship } from './stationRelationship';
+import { Artwork } from './artwork';
 
 // https://developer.apple.com/documentation/applemusicapi/artist
 export interface Artist extends Resource {
@@ -20,6 +21,7 @@ namespace Artist {
     genreNames: string[];
     name: string;
     url: string;
+    artwork?: Artwork;
   }
 
   // https://developer.apple.com/documentation/applemusicapi/artist/relationships
