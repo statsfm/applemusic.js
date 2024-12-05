@@ -21,13 +21,14 @@ namespace Album {
   export interface Attributes {
     albumName: string;
     artistName: string;
-    artwork?: Artwork;
+    artwork: Artwork;
     contentRating?: ContentRating;
     copyright?: string;
     editorialNotes?: EditorialNotes;
     genreNames: string[];
     isComplete: boolean;
     isSingle: boolean;
+    isCompilation: boolean;
     name: string;
     playParams?: PlayParameters;
     recordLabel: string;
