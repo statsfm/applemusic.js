@@ -1,5 +1,5 @@
 import { HttpClient } from '../http/HttpClient';
-import { ResponseRoot } from '../interfaces/AppleMusic';
+import { Relationship, ResponseRoot } from '../interfaces/AppleMusic';
 import {
   Manager,
   Options,
@@ -33,4 +33,14 @@ export class SearchManager<T extends ResponseRoot> extends Manager<T> {
   getMany(_options: Partial<Options> = {}): Promise<T> {
     throw new Error('Method not implemented');
   }
+
+  /* eslint-disable no-unused-vars,@typescript-eslint/no-unused-vars */
+  getRelationship<R extends Relationship>(
+    id: string,
+    relationship: string,
+    options: Partial<Options>
+  ): Promise<R> {
+    throw new Error('Method not implemented.');
+  }
+  /* eslint-disable no-unused-vars,@typescript-eslint/no-unused-vars */
 }
