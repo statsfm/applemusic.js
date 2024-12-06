@@ -2,8 +2,9 @@ import type { AxiosResponse } from 'axios';
 
 import { HttpClient } from './http/HttpClient';
 import type { ClientConfiguration } from './interfaces/Config';
-import type { ResponseRoot } from './interfaces/AppleMusic/responseRoot';
+import type { ResponseRoot } from './interfaces/AppleMusic';
 import { AppleMusicError } from './AppleMusicError';
+import { Relationship } from './interfaces/AppleMusic';
 
 type SearchType = 'songs' | 'artists' | 'albums' | 'playlists';
 
@@ -69,4 +70,12 @@ export abstract class Manager<T> {
 
   // eslint-disable-next-line no-unused-vars
   abstract getMany(options: Partial<Options>): Promise<T>;
+
+  /* eslint-disable no-unused-vars */
+  abstract getRelationship<R extends Relationship>(
+    id: string,
+    relationship: string,
+    options: Partial<Options>
+  ): Promise<R>;
+  /* eslint-disable no-unused-vars*/
 }

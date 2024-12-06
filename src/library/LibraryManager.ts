@@ -1,5 +1,5 @@
 import { HttpClient } from '../http/HttpClient';
-import { ResponseRoot } from '../interfaces/AppleMusic';
+import { Relationship, ResponseRoot } from '../interfaces/AppleMusic';
 import { Manager, Options, buildQuery, extractResponseData } from '../Manager';
 
 export class LibraryManager<T extends ResponseRoot> extends Manager<T> {
@@ -25,5 +25,17 @@ export class LibraryManager<T extends ResponseRoot> extends Manager<T> {
     const response = await this.http.get<T>(url);
 
     return extractResponseData<T>(response);
+  }
+
+  async getRelationship<R extends Relationship>(
+    id: string,
+    relationship: string,
+    options: Partial<Options>
+  ): Promise<R> {
+    const query = buildQuery(this.http.config, options);
+    const url = this.http.getURL(`/v1/me/library/${this.entity}/${id}/${relationship}`, query);
+    const response = await this.http.get<R>(url);
+
+    return extractResponseData<R>(response);
   }
 }
