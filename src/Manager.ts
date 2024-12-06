@@ -2,9 +2,8 @@ import type { AxiosResponse } from 'axios';
 
 import { HttpClient } from './http/HttpClient';
 import type { ClientConfiguration } from './interfaces/Config';
-import type { ResponseRoot } from './interfaces/AppleMusic';
+import type { ResponseRoot, Relationship } from './interfaces/AppleMusic';
 import { AppleMusicError } from './AppleMusicError';
-import { Relationship } from './interfaces/AppleMusic';
 
 type SearchType = 'songs' | 'artists' | 'albums' | 'playlists';
 
