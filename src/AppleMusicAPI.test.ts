@@ -4,6 +4,7 @@ import process from 'process';
 import { AppleMusicAPI } from './AppleMusicAPI';
 import { AppleMusicError } from './AppleMusicError';
 import { ClientConfiguration } from './interfaces/Config';
+import { BadRequestError, UnauthorizedError } from './errors';
 
 const { APPLE_MUSIC_DEVELOPER_TOKEN: developerToken } = process.env;
 if (!developerToken) {
@@ -24,7 +25,6 @@ describe('AppleMusicAPI', () => {
 
   it('handles authorization errors', async () => {
     client = new AppleMusicAPI({
-      ...baseConfig,
       developerToken: 'invalid'
     });
 
@@ -32,11 +32,13 @@ describe('AppleMusicAPI', () => {
     // if the same playlist is requested in other test cases (maybe caching?).
     await expect(
       client.playlists.get('pl.7d657a836db14d768accd2e6ffd1b0ad', { storefront: 'jp' })
-    ).rejects.toThrow(
-      new Error(
-        'Request to https://api.music.apple.com/v1/catalog/jp/playlists/pl.7d657a836db14d768accd2e6ffd1b0ad failed with status code 401'
-      )
-    );
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('handles bad request errors', async () => {
+    await expect(
+      client.playlists.get('pl.5ee8333dbe944d9f9151e97d92d1ead9', { storefront: 'foo' })
+    ).rejects.toThrow(BadRequestError);
   });
 
   it('handles Playlist.Attributes.lastModifiedDate as Date object', async () => {
@@ -60,12 +62,6 @@ describe('AppleMusicAPI', () => {
     expect(releaseDate?.month).toEqual(11);
     expect(releaseDate?.day).toEqual(30);
     expect(releaseDate?.toUTCDate().getFullYear()).toEqual(2018);
-  });
-
-  it('handles application errors', async () => {
-    await expect(
-      client.playlists.get('pl.5ee8333dbe944d9f9151e97d92d1ead9', { storefront: 'foo' })
-    ).rejects.toThrow(new AppleMusicError('Unknown Storefront', 400));
   });
 
   it('supports language tags', async () => {
