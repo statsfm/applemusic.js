@@ -1,111 +1,67 @@
-/* eslint-disable no-unused-vars */
-export class AuthError extends Error {
-  data: Record<string, unknown>;
-  name = AuthError.name;
+import { Error } from '../interfaces/AppleMusic/error';
 
+/* eslint-disable no-unused-vars */
+class HttpError extends Error {
   constructor(
-    message: string,
-    extra: {
-      stack?: string;
-      data?: Record<string, unknown>;
-    } = {}
+    public readonly url: string,
+    public readonly status: number,
+    public readonly message: string
   ) {
     super(message);
-
-    if (extra.stack) this.stack = extra.stack;
-    if (extra.data) this.data = extra.data;
   }
 }
 
-export class UnauthorizedError extends Error {
-  public data: Record<string, unknown>;
+export class UnauthorizedError extends HttpError {
   name = UnauthorizedError.name;
 
-  constructor(
-    public url: string,
-    extra: {
-      stack?: string;
-      data?: Record<string, unknown>;
-    } = {}
-  ) {
-    super('Unauthorized');
-    if (extra.stack) this.stack = extra.stack;
-    if (extra.data) this.data = extra.data;
+  constructor(url: string) {
+    super(url, 401, 'Unauthorized');
   }
 }
 
-export class ForbiddenError extends Error {
-  public data: Record<string, unknown>;
+export class ForbiddenError extends HttpError {
   name = ForbiddenError.name;
 
-  constructor(
-    public url: string,
-    extra: {
-      stack?: string;
-      data?: Record<string, unknown>;
-    } = {}
-  ) {
-    super('Forbidden, are you sure you have the right scopes?');
-
-    if (extra.stack) this.stack = extra.stack;
-    if (extra.data) this.data = extra.data;
+  constructor(url: string) {
+    super(url, 403, 'Forbidden, are you sure you have the right scopes?');
   }
 }
 
-export class NotFoundError extends Error {
+export class NotFoundError extends HttpError {
   name = NotFoundError.name;
 
-  constructor(
-    public url: string,
-    public stack?: string
-  ) {
-    super('Not found');
+  constructor(url: string) {
+    super(url, 404, 'Not Found');
   }
 }
 
-export class RatelimitError extends Error {
-  public data: Record<string, unknown>;
+export class RatelimitError extends HttpError {
   name = RatelimitError.name;
 
-  constructor(
-    message: string,
-    public url: string,
-    extra: {
-      stack?: string;
-      data?: Record<string, unknown>;
-    } = {}
-  ) {
-    super(message);
-
-    if (extra.stack) this.stack = extra.stack;
+  constructor(url: string, retryDelay: string) {
+    super(url, 429, `Hit ratelimit, retry after ${retryDelay} seconds`);
   }
 }
 
-export class BadRequestError extends Error {
-  public data: Record<string, unknown>;
+export class BadRequestError extends HttpError {
   name = BadRequestError.name;
 
   constructor(
-    public url: string,
-    extra: {
-      stack?: string;
-      data?: Record<string, unknown>;
-    } = {}
+    url: string,
+    public errors: Error[]
   ) {
-    super('Bad request');
-
-    if (extra.stack) this.stack = extra.stack;
-    if (extra.data) this.data = extra.data;
+    super(url, 400, 'Bad Request');
   }
 }
 
 export class RequestRetriesExceededError extends Error {
+  name = RequestRetriesExceededError.name;
+
   constructor(
-    message: string,
-    public url: string,
+    public readonly message: string,
+    public readonly url: string,
     public readonly cause: unknown
   ) {
     super(message);
-    this.name = 'RequestRetriesExceededError';
   }
 }

@@ -4,11 +4,13 @@ import axios, {
   AxiosInstance,
   AxiosPromise,
   AxiosRequestConfig,
-  InternalAxiosRequestConfig
+  AxiosResponse
 } from 'axios';
 import * as https from 'https';
 import { ClientRequest } from 'http';
+import axiosRetry, { retryAfter } from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
+
 import { ClientConfiguration } from '../interfaces/Config';
 import {
   BadRequestError,
@@ -18,10 +20,9 @@ import {
   RequestRetriesExceededError,
   UnauthorizedError
 } from '../errors';
-import { sleep } from '../util/sleep';
 import { parseWithDates } from '../util/json';
 
-type ConfigWithRetry = InternalAxiosRequestConfig & { retryAttempt?: number };
+const RETRY_DELAY_MS = 1_000;
 
 export class HttpClient {
   protected baseURL = 'https://api.music.apple.com';
@@ -58,8 +59,7 @@ export class HttpClient {
         Origin: 'https://music.apple.com',
         'User-Agent':
           this.config.http?.userAgent ??
-          '@statsfm/applemusic.js (https://github.com/statsfm/applemusic.js)',
-        'Media-User-Token': this.config.mediaUserToken ?? ''
+          '@statsfm/applemusic.js (https://github.com/statsfm/applemusic.js)'
       },
       // https://github.com/axios/axios/blob/v0.20.0-0/lib/defaults.js#L57-L65
       transformResponse: [
@@ -70,12 +70,11 @@ export class HttpClient {
 
           try {
             return parseWithDates(value, this.config.dateKeys || null);
-          } catch (e) {
+          } catch (_error) {
             return value;
           }
         }
-      ],
-      validateStatus: () => true // Handle errors by ourselves
+      ]
     };
 
     if (this.config.http?.localAddress) {
@@ -93,173 +92,128 @@ export class HttpClient {
       };
     }
 
+    const maxRetryAttempts = this.config.retry5xxAmount ?? 3;
+
+    const getRetryDelay = (_retryCount: number, error: AxiosError): number => {
+      return Math.max(RETRY_DELAY_MS, retryAfter(error));
+    };
+
+    const validateResponse = (response: AxiosResponse): boolean => {
+      return response.status < 500 && response.status !== 429;
+    };
+
+    const shouldRetry = (error: AxiosError): boolean => this.shouldRetryRequest(error);
+
+    const onRetry = (retryCount: number, error: AxiosError, config: AxiosRequestConfig): void => {
+      if (this.config.debug || this.config.logRetry) {
+        console.debug(`(${retryCount}/${maxRetryAttempts}) retry ${config.url} - ${error}`);
+      }
+    };
+
+    const onMaxRetryTimesExceeded = (error: AxiosError): void => {
+      if (maxRetryAttempts === 0) {
+        return;
+      }
+
+      throw new RequestRetriesExceededError(
+        `Request ${maxRetryAttempts} retry attempts exceeded`,
+        error.config.url,
+        error.stack
+      );
+    };
+
     const client = axios.create(config);
 
-    axiosBetterStacktrace(client);
-
     client.interceptors.request.use((config) => {
-      config.headers.Authorization = `Bearer ${this.config.developerToken}`;
+      const { developerToken, mediaUserToken } = this.config;
+
+      config.headers.Authorization = `Bearer ${developerToken}`;
+
+      if (mediaUserToken) {
+        config.headers['Media-User-Token'] = mediaUserToken;
+      }
 
       return config;
     });
 
-    // error handling interceptor
+    axiosRetry(client, {
+      retries: maxRetryAttempts,
+      retryDelay: getRetryDelay,
+      validateResponse,
+      retryCondition: shouldRetry,
+      onRetry,
+      onMaxRetryTimesExceeded
+    });
+
     client.interceptors.response.use(
-      (response) => response,
-      (err: unknown) => this.handleError(client, err)
+      (response) => this.handleResponse(response),
+      (err: unknown) => this.handleError(err)
     );
+
+    axiosBetterStacktrace(client);
 
     return client;
   }
 
-  private async handleError(client: AxiosInstance, err: unknown): AxiosPromise {
-    if (axios.isCancel(err) || axios.isAxiosError(err) === false || !this.shouldRetryRequest(err)) {
-      return await Promise.reject(this.extractResponseError(err));
+  private shouldRetryRequest(error: unknown): boolean {
+    if (axios.isCancel(error) || axios.isAxiosError(error) === false) {
+      return false;
     }
 
-    const requestConfig = err.config as ConfigWithRetry;
-
-    requestConfig.retryAttempt ||= 0;
-
-    const isRateLimited = err.response && err.response.status === 429;
-
-    if (isRateLimited) {
-      if (this.config.logRetry) {
-        console.log(err.response);
-      }
-
-      const retryAfter = Number(err.response.headers['retry-after']) || 0;
-
-      if (this.config.logRetry || this.config.logRetry === undefined) {
-        console.error(
-          `Hit ratelimit, retrying in ${retryAfter} second(s), path: ${err.request.path}`
-        );
-      }
-
-      await sleep(retryAfter * 1_000);
-
-      requestConfig.retryAttempt = 0;
-    } else {
-      await sleep(1_000);
-
-      requestConfig.retryAttempt! += 1;
-
-      if (this.config.debug) {
-        console.log(
-          `(${requestConfig.retryAttempt}/${this.maxRetryAttempts}) retry ${requestConfig.url} - ${err}`
-        );
-      }
+    if (axiosRetry.isNetworkError(error)) {
+      return true;
     }
 
-    return await client.request(requestConfig);
-  }
-
-  private shouldRetryRequest(err: AxiosError): boolean {
-    // non-response errors should clarified as 5xx and retried (socket hangup, ECONNRESET, etc.)
-    if (!err.response) {
-      if (this.config.retry5xx === false) {
-        return false;
-      }
-
-      const { retryAttempt = 0 } = err.config as ConfigWithRetry;
-
-      return retryAttempt < this.maxRetryAttempts;
+    if (!error.response) {
+      return this.config.retry5xx !== false;
     }
 
-    const { status } = err.response;
+    const { status } = error.response;
 
     if (status === 429) {
       return this.config.retry !== false;
     }
 
     if (status >= 500 && status < 600) {
-      if (this.config.retry5xx === false) {
-        return false;
-      }
-
-      const { retryAttempt = 0 } = err.config as ConfigWithRetry;
-
-      return retryAttempt < this.maxRetryAttempts;
+      return this.config.retry5xx !== false;
     }
 
     return false;
   }
 
-  private extractResponseError(err: unknown): unknown {
-    if (axios.isCancel(err) || axios.isAxiosError(err) === false) {
-      return err;
-    }
-
-    // non-response errors should clarified as 5xx and retried (socket hangup, ECONNRESET, etc.)
-    if (!err.response) {
-      const { retryAttempt = 0 } = err.config as ConfigWithRetry;
-
-      if (this.config.retry5xx === false || retryAttempt < this.maxRetryAttempts) {
-        return err;
-      }
-
-      return new RequestRetriesExceededError(
-        `Request max ${this.maxRetryAttempts} retry attempts exceeded`,
-        err.config.url,
-        err.stack
-      );
-    }
-
-    const { stack, config, response } = err;
-    const { status, headers, data } = response;
-
-    if (status >= 500 && status < 600) {
-      const { retryAttempt } = err.config as ConfigWithRetry;
-
-      if (this.config.retry5xx === false || retryAttempt < this.maxRetryAttempts) {
-        return err;
-      }
-
-      return new RequestRetriesExceededError(
-        `Request ${this.maxRetryAttempts} retry attempts exceeded`,
-        err.config.url,
-        err.stack
-      );
-    }
+  private handleResponse(response: AxiosResponse): AxiosResponse {
+    const { status, data, config } = response;
 
     switch (status) {
       case 400:
-        return new BadRequestError(config.url, {
-          stack,
-          data
-        });
+        throw new BadRequestError(config.url, data.errors);
 
       case 401:
-        return new UnauthorizedError(config.url, {
-          stack,
-          data
-        });
+        throw new UnauthorizedError(config.url);
 
       case 403:
-        return new ForbiddenError(config.url, {
-          stack,
-          data
-        });
+        throw new ForbiddenError(config.url);
 
       case 404:
-        throw new NotFoundError(config.url, stack);
-
-      case 429:
-        return new RatelimitError(
-          `Hit ratelimit, retry after ${headers['retry-after']} seconds`,
-          err.config.url,
-          {
-            stack,
-            data
-          }
-        );
+        throw new NotFoundError(config.url);
     }
 
-    return err;
+    return response;
   }
 
-  private get maxRetryAttempts(): number {
-    return this.config.retry5xxAmount ?? 3;
+  private handleError(err: unknown): unknown {
+    if (axios.isCancel(err) || axios.isAxiosError(err) === false || !err.response) {
+      throw err;
+    }
+
+    const { response } = err;
+    const { status, headers } = response;
+
+    if (status === 429) {
+      throw new RatelimitError(err.config.url, headers['retry-after']);
+    }
+
+    throw err;
   }
 
   get<T>(url: string, config?: AxiosRequestConfig): AxiosPromise<T> {
